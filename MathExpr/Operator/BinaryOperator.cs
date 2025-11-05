@@ -9,7 +9,7 @@ public abstract record BinaryOperator(Expr Left, Expr Right) : Expr
 
 	// IExpr:
 	public override IEnumerable<string> Variables =>
-		Left.Variables.Concat(Right.Variables).Distinct();
+		Left.Variables.Union(Right.Variables);
 	public override int? PolynomialDegree => (Left.IsPolynomial && Right.IsPolynomial) ?
 		int.Max(Left.PolynomialDegree.Value, Right.PolynomialDegree.Value) : null;
 	public sealed override double Compute(IReadOnlyDictionary<string, double> variables)
