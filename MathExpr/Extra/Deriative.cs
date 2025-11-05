@@ -9,60 +9,28 @@ public static class DeriativeExt
 {
 	extension(IExpr expr)
 	{
-		public IExpr Deriative(string variable)
-			=> expr.Accept(new DeriativeVisitor(variable));
+		public IExpr Deriative(string v)
+			=> expr switch {
+				Variable(var x) => new Constant((x == v)  ? 1 : 0),
+				Constant => Constant.Zero,
+				Negate(var a) => -a.Deriative(v),
+				Add(var a, var b) => a.Deriative(v) + b.Deriative(v),
+				Subtract(var a, var b) => a.Deriative(v) - b.Deriative(v),
+				Multiply(var a, var b) => a.Deriative(v) * b + a * b.Deriative(v),
+				Divide(var a, var b) => (a.Deriative(v) * b - a * b.Deriative(v)) / (b ^ 2),
+				Power(var a, var b) => (a ^ b) * (b.Deriative(v) * Log(a) + b / a * a.Deriative(v)),
+				Sqrt sqrt => 0.5 * sqrt.Argument.Deriative(v) / sqrt,
+				Exp exp => exp.Argument.Deriative(v) * exp,
+				Log(var a) => a.Deriative(v) / a,
+				Sinh(var a) => a.Deriative(v) * Cosh(a),
+				Cosh(var a) => a.Deriative(v) * Sinh(a),
+				Tanh(var a) => a.Deriative(v) * (1 - (Tanh(a) ^ 2)),
+				_ => throw new NotImplementedException(
+					$"{nameof(Deriative)} is not implemented for expression of type {expr.GetType()}"
+				)
+			};
 
 		public IExpr Deriative(Variable variable)
 			=> expr.Deriative(variable.Name);
 	}
-}
-
-
-public sealed record DeriativeVisitor(string Var) : IExprVisitor<IExpr>
-{
-	private IExpr DDVar(IExpr expr)
-		=> expr.Accept(this);
-
-	public IExpr Visit(Variable variable)
-		=> new Constant((variable.Name == Var) ? 1 : 0);
-
-	public IExpr Visit(Constant constant)
-		=> new Constant(0);
-
-
-	public IExpr Visit(Negate negate)
-		=> -DDVar(negate.Operand);
-
-	public IExpr Visit(Add add)
-		=> DDVar(add.Left) + DDVar(add.Right);
-
-	public IExpr Visit(Subtract sub)
-		=> DDVar(sub.Left) - DDVar(sub.Right);
-
-	public IExpr Visit(Multiply mul)
-		=> DDVar(mul.Left) * mul.Right + mul.Left * DDVar(mul.Right);
-
-	public IExpr Visit(Divide div)
-		=> (DDVar(div.Left) * div.Right - div.Left * DDVar(div.Right)) / (div.Right ^ 2);
-
-	public IExpr Visit(Power pow)
-		=> pow * (DDVar(pow.Right) * Log(pow.Left) + pow.Right / pow.Left * DDVar(pow.Left));
-
-
-	public IExpr Visit(Sqrt sqrt)
-		=> DDVar(sqrt.Argument) / (2 * (IExpr)sqrt);
-	public IExpr Visit(Exp exp)
-		=> DDVar(exp.Argument) * exp;
-	public IExpr Visit(Log log)
-		=> DDVar(log.Argument) / log.Argument;
-
-
-	public IExpr Visit(Sinh sinh)
-		=> DDVar(sinh.Argument) * Cosh(sinh.Argument);
-
-	public IExpr Visit(Cosh cosh)
-		=> DDVar(cosh.Argument) * Sinh(cosh.Argument);
-
-	public IExpr Visit(Tanh tanh)
-		=> DDVar(tanh.Argument) * (1 - ((IExpr)tanh ^ 2));
 }
