@@ -1,10 +1,8 @@
-﻿using MathExpr.Util;
-
-namespace MathExpr;
+﻿namespace MathExpr;
 
 public sealed record Variable(string Name) : Expr
 {
-	public override IEnumerable<string> Variables => Name.Yield();
+	public override IEnumerable<string> Variables => [Name];
 	public override int? PolynomialDegree => 1;
 
 	public override double Compute(IReadOnlyDictionary<string, double> variables)
