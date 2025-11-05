@@ -11,7 +11,7 @@ internal static class TestProgram
 		RunBasicTest();
 		Console.WriteLine();
 		Console.WriteLine("[DeriativeTest1]");
-		RunDeriativeTest1();
+		RunDerivativeTest1();
 	}
 
 	private static void RunBasicTest()
@@ -28,7 +28,7 @@ internal static class TestProgram
 		Console.WriteLine($"-Value (x = 1, y = 2): {expr2.Compute(inputValues)}");
 	}
 
-	private static void RunDeriativeTest1()
+	private static void RunDerivativeTest1()
 	{
 		var x = new Variable("x");
 		var y = new Variable("y");
