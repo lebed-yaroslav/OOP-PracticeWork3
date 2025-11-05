@@ -4,6 +4,7 @@ public abstract record Function(Expr Argument) : Expr
 {
 	// Function:
 	public string Name => GetType().Name; // Slow but simple
+	public abstract Expr Derivative();
 	public abstract double ComputeFor(double value);
 
 	// IExpr:
