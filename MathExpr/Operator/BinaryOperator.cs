@@ -1,29 +1,29 @@
 ﻿namespace MathExpr.Operator;
 
 
-public abstract record BinaryOperator(IExpr Left, IExpr Right) : IExpr
+public abstract record BinaryOperator(Expr Left, Expr Right) : Expr
 {
+	// BinaryOperator:
 	public abstract string Alias { get; }
-
-	public IEnumerable<string> Variables =>
-		Left.Variables.Concat(Right.Variables).Distinct();
-
-	public virtual int? PolynomialDegree => (Left.IsPolynomial && Right.IsPolynomial) ?
-		int.Max(Left.PolynomialDegree.Value, Right.PolynomialDegree.Value) : null;
-
-	public double Compute(IReadOnlyDictionary<string, double> variables)
-		=> ComputeFor(Left.Compute(variables), Right.Compute(variables));
 	public abstract double ComputeFor(double left, double right);
 
-	public abstract T Accept<T>(IExprVisitor<T> visitor);
+	// IExpr:
+	public override IEnumerable<string> Variables =>
+		Left.Variables.Concat(Right.Variables).Distinct();
+	public override int? PolynomialDegree => (Left.IsPolynomial && Right.IsPolynomial) ?
+		int.Max(Left.PolynomialDegree.Value, Right.PolynomialDegree.Value) : null;
+	public sealed override double Compute(IReadOnlyDictionary<string, double> variables)
+		=> ComputeFor(Left.Compute(variables), Right.Compute(variables));
 
+	// Object:
 	public sealed override string ToString() => $"({Left} {Alias} {Right})";
 }
 
 
-public sealed record Add(IExpr Left, IExpr Right) : BinaryOperator(Left, Right)
+public sealed record Add(Expr Left, Expr Right) : BinaryOperator(Left, Right)
 {
 	public override string Alias => "+";
+
 	public override double ComputeFor(double left, double right)
 		=> left + right;
 
@@ -31,7 +31,7 @@ public sealed record Add(IExpr Left, IExpr Right) : BinaryOperator(Left, Right)
 }
 
 
-public sealed record Subtract(IExpr Left, IExpr Right) : BinaryOperator(Left, Right)
+public sealed record Subtract(Expr Left, Expr Right) : BinaryOperator(Left, Right)
 {
 	public override string Alias => "-";
 	public override double ComputeFor(double left, double right)
@@ -41,7 +41,7 @@ public sealed record Subtract(IExpr Left, IExpr Right) : BinaryOperator(Left, Ri
 }
 
 
-public sealed record Multiply(IExpr Left, IExpr Right) : BinaryOperator(Left, Right)
+public sealed record Multiply(Expr Left, Expr Right) : BinaryOperator(Left, Right)
 {
 	public override string Alias => "*";
 	public override int? PolynomialDegree => (Left.IsPolynomial && Right.IsPolynomial) ?
@@ -53,7 +53,7 @@ public sealed record Multiply(IExpr Left, IExpr Right) : BinaryOperator(Left, Ri
 }
 
 
-public sealed record Divide(IExpr Left, IExpr Right) : BinaryOperator(Left, Right)
+public sealed record Divide(Expr Left, Expr Right) : BinaryOperator(Left, Right)
 {
 	public override string Alias => "/";
 	public override int? PolynomialDegree => (Left.IsPolynomial && Right.IsConstant) ?
@@ -65,14 +65,14 @@ public sealed record Divide(IExpr Left, IExpr Right) : BinaryOperator(Left, Righ
 }
 
 
-public sealed record Power(IExpr Left, IExpr Right) : BinaryOperator(Left, Right)
+public sealed record Power(Expr Left, Expr Right) : BinaryOperator(Left, Right)
 {
 	public override string Alias => "^";
 	public override int? PolynomialDegree 
 	{
 		get 
 		{
-			if (!Left.IsPolynomial || Right is not Constant c) // Only for simplifed expressions
+			if (!Left.IsPolynomial || Right is not Constant c) // Only for simplified expressions
 				return null;
 			if (!double.IsInteger(c.Value))
 				return null;

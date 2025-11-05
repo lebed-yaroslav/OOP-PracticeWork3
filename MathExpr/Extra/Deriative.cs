@@ -7,9 +7,9 @@ namespace MathExpr.Extra;
 
 public static class DeriativeExt
 {
-	extension(IExpr expr)
+	extension(Expr expr)
 	{
-		public IExpr Deriative(string v)
+		public Expr Deriative(string v)
 			=> expr switch {
 				Variable(var x) => new Constant((x == v)  ? 1 : 0),
 				Constant => Constant.Zero,
@@ -30,7 +30,7 @@ public static class DeriativeExt
 				)
 			};
 
-		public IExpr Deriative(Variable variable)
+		public Expr Deriative(Variable variable)
 			=> expr.Deriative(variable.Name);
 	}
 }

@@ -16,9 +16,9 @@ internal static class TestProgram
 
 	private static void RunBasicTest()
 	{
-		IExpr x = new Variable("x");
-		IExpr y = new Variable("y");
-		IExpr c = new Constant(3);
+		var x = new Variable("x");
+		var y = new Variable("y");
+		var c = new Constant(3);
 		var expr1 = (x - 4) * (3 * x + y * y) / 5;
 		var expr2 = (5 - 3 * c) * Sqrt(16 + c * c);
 		var inputValues = new Dictionary<string, double> { ["x"] = 1, ["y"] = 2 };
@@ -30,9 +30,9 @@ internal static class TestProgram
 
 	private static void RunDeriativeTest1()
 	{
-		IExpr x = new Variable("x");
-		IExpr y = new Variable("y");
-		IExpr c = new Constant(10);
+		var x = new Variable("x");
+		var y = new Variable("y");
+		var c = new Constant(10);
 		var inputValues = new Dictionary<string, double> { ["x"] = 1, ["y"] = 2 };
 		var expr1 = Exp(Log(x + y + c));
 		WriteExprInfo(expr1);

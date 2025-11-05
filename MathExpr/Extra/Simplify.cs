@@ -7,28 +7,28 @@ namespace MathExpr.Extra;
 
 public static class SimplifyExt
 {
-	extension(IExpr expr)
+	extension(Expr expr)
 	{
-		public IExpr Simplify() => expr.Accept(BasicSimplifyVisitor.Instance);
+		public Expr Simplify() => expr.Accept(BasicSimplifyVisitor.Instance);
 	}
 }
 
 
-public sealed class BasicSimplifyVisitor : IExprVisitor<IExpr>
+public sealed class BasicSimplifyVisitor : IExprVisitor<Expr>
 {
 	public static BasicSimplifyVisitor Instance = new();
 	private BasicSimplifyVisitor() {}
 
-	private IExpr Simplify(IExpr expr)
+	private Expr Simplify(Expr expr)
 		=> expr.Accept(this);
 
-	public IExpr Visit(Variable var)
+	public Expr Visit(Variable var)
 		=> var;
 
-	public IExpr Visit(Constant c)
+	public Expr Visit(Constant c)
 		=> c;
 
-	public IExpr Visit(Negate neg)
+	public Expr Visit(Negate neg)
 	{
 		var operand = Simplify(neg.Operand);
 		return operand switch {
@@ -38,7 +38,7 @@ public sealed class BasicSimplifyVisitor : IExprVisitor<IExpr>
 		};
 	}
 
-	public IExpr Visit(Add add)
+	public Expr Visit(Add add)
 	{
 		var left = Simplify(add.Left);
 		var right = Simplify(add.Right);
@@ -65,7 +65,7 @@ public sealed class BasicSimplifyVisitor : IExprVisitor<IExpr>
 		return left + right;
 	}
 	
-	public IExpr Visit(Subtract sub)
+	public Expr Visit(Subtract sub)
 	{
 		var left = Simplify(sub.Left);
 		var right = Simplify(sub.Right);
@@ -85,7 +85,7 @@ public sealed class BasicSimplifyVisitor : IExprVisitor<IExpr>
 		return left - right;
 	}
 
-	public IExpr Visit(Multiply mul)
+	public Expr Visit(Multiply mul)
 	{
 		var left = Simplify(mul.Left);
 		var right = Simplify(mul.Right);
@@ -129,7 +129,7 @@ public sealed class BasicSimplifyVisitor : IExprVisitor<IExpr>
 		return left * right;
 	}
 
-	public IExpr Visit(Divide div)
+	public Expr Visit(Divide div)
 	{
 		var left = Simplify(div.Left);
 		var right = Simplify(div.Right);
@@ -156,7 +156,7 @@ public sealed class BasicSimplifyVisitor : IExprVisitor<IExpr>
 		return left / right;
 	}
 
-	public IExpr Visit(Power pow)
+	public Expr Visit(Power pow)
 	{
 		var left = Simplify(pow.Left);
 		var right = Simplify(pow.Right);
@@ -178,7 +178,7 @@ public sealed class BasicSimplifyVisitor : IExprVisitor<IExpr>
 		return left ^ right;
 	}
 
-	public IExpr Visit(Sqrt sqrt)
+	public Expr Visit(Sqrt sqrt)
 	{
 		var arg = Simplify(sqrt.Argument);
 		return arg switch {
@@ -187,7 +187,7 @@ public sealed class BasicSimplifyVisitor : IExprVisitor<IExpr>
 		};		
 	}
 
-	public IExpr Visit(Exp exp)
+	public Expr Visit(Exp exp)
 	{
 		var arg = Simplify(exp.Argument);
 		return arg switch {
@@ -199,7 +199,7 @@ public sealed class BasicSimplifyVisitor : IExprVisitor<IExpr>
 		};
 	}
 
-	public IExpr Visit(Log log)
+	public Expr Visit(Log log)
 	{
 		var arg = Simplify(log.Argument);
 		return arg switch {
@@ -211,7 +211,7 @@ public sealed class BasicSimplifyVisitor : IExprVisitor<IExpr>
 		};
 	}
 
-	public IExpr Visit(Sinh sinh)
+	public Expr Visit(Sinh sinh)
 	{
 		var arg = Simplify(sinh.Argument);
 		return arg switch {
@@ -220,7 +220,7 @@ public sealed class BasicSimplifyVisitor : IExprVisitor<IExpr>
 		};
 	}
 
-	public IExpr Visit(Cosh cosh)
+	public Expr Visit(Cosh cosh)
 	{
 		var arg = Simplify(cosh.Argument);
 		return arg switch {
@@ -229,7 +229,7 @@ public sealed class BasicSimplifyVisitor : IExprVisitor<IExpr>
 		};
 	}
 
-	public IExpr Visit(Tanh tanh)
+	public Expr Visit(Tanh tanh)
 	{
 		var arg = Simplify(tanh.Argument);
 		return arg switch {

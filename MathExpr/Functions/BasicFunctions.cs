@@ -2,55 +2,42 @@
 
 public static class BasicFunctions
 {
-	public static IExpr Sqrt(IExpr expr)
+	public static Expr Sqrt(Expr expr)
 		=> new Sqrt(expr);
-	public static IExpr Exp(IExpr expr)
+	public static Expr Exp(Expr expr)
 		=> new Exp(expr);
-	public static IExpr Log(IExpr expr)
+	public static Expr Log(Expr expr)
 		=> new Log(expr);
-	public static IExpr Sinh(IExpr expr)
+	public static Expr Sinh(Expr expr)
 		=> new Sinh(expr);
-	public static IExpr Cosh(IExpr expr)
+	public static Expr Cosh(Expr expr)
 		=> new Cosh(expr);
-	public static IExpr Tanh(IExpr expr)
+	public static Expr Tanh(Expr expr)
 		=> new Tanh(expr);
-
-	public static IExpr Sqrt(double value)
-		=> new Sqrt(new Constant(value));
-	public static IExpr Exp(double value)
-		=> new Exp(new Constant(value));
-	public static IExpr Log(double value)
-		=> new Log(new Constant(value));
-	public static IExpr Sinh(double value)
-		=> new Sinh(new Constant(value));
-	public static IExpr Cosh(double value)
-		=> new Cosh(new Constant(value));
-	public static IExpr Tanh(double value)
-		=> new Tanh(new Constant(value));
 }
 
-public sealed record Sqrt(IExpr Argument) : Function(Argument)
+public sealed record Sqrt(Expr Argument) : Function(Argument)
 {
 	public override double ComputeFor(double value)
 		=> Math.Sqrt(value);
 	public override T Accept<T>(IExprVisitor<T> visitor) => visitor.Visit(this);
 }
 
-public sealed record Exp(IExpr Argument) : Function(Argument)
+public sealed record Exp(Expr Argument) : Function(Argument)
 {
 	public override double ComputeFor(double value)
 		=> Math.Exp(value);
 	public override T Accept<T>(IExprVisitor<T> visitor) => visitor.Visit(this);
 }
 
-public sealed record Log(IExpr Argument) : Function(Argument)
+public sealed record Log(Expr Argument) : Function(Argument)
 {
 	public override double ComputeFor(double value)
 		=> Math.Log(value);
 	public override T Accept<T>(IExprVisitor<T> visitor) => visitor.Visit(this);
 }
 
-public sealed record Sinh(IExpr Argument) : Function(Argument)
+public sealed record Sinh(Expr Argument) : Function(Argument)
 {
 	public override double ComputeFor(double value)
 		=> Math.Sinh(value);
@@ -58,14 +45,14 @@ public sealed record Sinh(IExpr Argument) : Function(Argument)
 }
 
 
-public sealed record Cosh(IExpr Argument) : Function(Argument)
+public sealed record Cosh(Expr Argument) : Function(Argument)
 {
 	public override double ComputeFor(double value)
 		=> Math.Cosh(value);
 	public override T Accept<T>(IExprVisitor<T> visitor) => visitor.Visit(this);
 }
 
-public sealed record Tanh(IExpr Argument) : Function(Argument)
+public sealed record Tanh(Expr Argument) : Function(Argument)
 {
 	public override double ComputeFor(double value)
 		=> Math.Tanh(value);
