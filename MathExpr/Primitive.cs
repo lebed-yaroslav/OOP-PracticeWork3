@@ -16,17 +16,18 @@ public sealed record Variable(string Name) : IExpr
 }
 
 
-public struct Constant(double value) : IExpr
+public sealed record Constant(double Value) : IExpr
 {
-	public double Value => value;
+	public static readonly Constant Zero = new(0);
+	public static readonly Constant One = new(1);
 
 	public IEnumerable<string> Variables => Enumerable.Empty<string>();
 	public int? PolynomialDegree => 0;
 
 	public double Compute(IReadOnlyDictionary<string, double> variables)
-		=> value;
+		=> Value;
 
 	public T Accept<T>(IExprVisitor<T> visitor) => visitor.Visit(this);
 
-	public override string ToString() => value.ToString();
+	public override string ToString() => Value.ToString();
 }
