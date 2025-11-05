@@ -1,4 +1,4 @@
-﻿using MathExpr.Function;
+﻿using MathExpr.Functions;
 using MathExpr.Operator;
 
 namespace MathExpr;

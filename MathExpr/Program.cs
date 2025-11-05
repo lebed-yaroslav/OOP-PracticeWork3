@@ -1,6 +1,6 @@
 ﻿using MathExpr;
 using MathExpr.Extra;
-using static MathExpr.Function.BasicFunctions;
+using static MathExpr.Functions.BasicFunctions;
 
 internal static class TestProgram
 {

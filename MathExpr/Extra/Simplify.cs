@@ -1,6 +1,6 @@
-﻿using MathExpr.Function;
+﻿using MathExpr.Functions;
 using MathExpr.Operator;
-using static MathExpr.Function.BasicFunctions;
+using static MathExpr.Functions.BasicFunctions;
 
 namespace MathExpr.Extra;
 

@@ -1,4 +1,4 @@
-﻿namespace MathExpr.Function;
+﻿namespace MathExpr.Functions;
 
 public abstract record Function(IExpr Argument) : IExpr
 {

@@ -1,4 +1,4 @@
-﻿namespace MathExpr.Function;
+﻿namespace MathExpr.Functions;
 
 public static class BasicFunctions
 {
