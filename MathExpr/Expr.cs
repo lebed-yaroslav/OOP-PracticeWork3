@@ -1,4 +1,5 @@
 ﻿using MathExpr.Operator;
+using System.Collections.Immutable;
 
 namespace MathExpr;
 
@@ -24,7 +25,7 @@ public static class IExprExt
 		/// </summary>
 		/// <exception cref="KeyNotFoundException"/>
 		/// <returns>Computed value</returns>
-		public double ComputeConstant() => expr.Compute(new Dictionary<string, double>());
+		public double ComputeConstant() => expr.Compute(ImmutableDictionary<string, double>.Empty);
 	}
 }
 
