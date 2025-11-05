@@ -38,9 +38,9 @@ internal static class TestProgram
 		WriteExprInfo(expr1);
 		Console.WriteLine($"-Value (x = 1, y = 2): {expr1.Compute(inputValues)}");
 		Console.WriteLine($"(Simplified): {expr1.Simplify()}");
-		Console.WriteLine($"(Simplified) d/dx: {expr1.Simplify().Deriative("x")}");
-		Console.WriteLine($"d/dx (Non simplified): {expr1.Deriative("x")}");
-		Console.WriteLine($"d/dx (Simplified): {expr1.Deriative("x").Simplify()}");
+		Console.WriteLine($"(Simplified) d/dx: {expr1.Simplify().Derivative("x")}");
+		Console.WriteLine($"d/dx (Non simplified): {expr1.Derivative("x")}");
+		Console.WriteLine($"d/dx (Simplified): {expr1.Derivative("x").Simplify()}");
 	}
 
 	private static void WriteExprInfo(IExpr expr)
