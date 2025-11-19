@@ -9,7 +9,6 @@ public interface IExpr
 	IEnumerable<string> Variables { get; }
 	int? PolynomialDegree { get; }
 	double Compute(IReadOnlyDictionary<string, double> variables);
-	T Accept<T>(IExprVisitor<T> visitor);
 }
 
 
@@ -35,7 +34,6 @@ public abstract record Expr : IExpr
 	public abstract IEnumerable<string> Variables { get; }
 	public abstract int? PolynomialDegree { get; }
 	public abstract double Compute(IReadOnlyDictionary<string, double> variables);
-	public abstract T Accept<T>(IExprVisitor<T> visitor);
 
 
 	// Operators:

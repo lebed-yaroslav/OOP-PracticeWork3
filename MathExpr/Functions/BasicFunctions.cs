@@ -24,7 +24,6 @@ public sealed record Sqrt(Expr Argument) : Function(Argument)
 		=> Math.Sqrt(value);
 	public override Expr Derivative()
 		=> 0.5 / this;
-	public override T Accept<T>(IExprVisitor<T> visitor) => visitor.Visit(this);
 }
 
 public sealed record Exp(Expr Argument) : Function(Argument)
@@ -33,7 +32,6 @@ public sealed record Exp(Expr Argument) : Function(Argument)
 		=> Math.Exp(value);
 	public override Expr Derivative()
 		=> this;
-	public override T Accept<T>(IExprVisitor<T> visitor) => visitor.Visit(this);
 }
 
 public sealed record Log(Expr Argument) : Function(Argument)
@@ -42,7 +40,6 @@ public sealed record Log(Expr Argument) : Function(Argument)
 		=> Math.Log(value);
 	public override Expr Derivative()
 		=> 1 / Argument;
-	public override T Accept<T>(IExprVisitor<T> visitor) => visitor.Visit(this);
 }
 
 public sealed record Sinh(Expr Argument) : Function(Argument)
@@ -51,7 +48,6 @@ public sealed record Sinh(Expr Argument) : Function(Argument)
 		=> Math.Sinh(value);
 	public override Expr Derivative()
 		=> Cosh(Argument);
-	public override T Accept<T>(IExprVisitor<T> visitor) => visitor.Visit(this);
 }
 
 
@@ -61,7 +57,6 @@ public sealed record Cosh(Expr Argument) : Function(Argument)
 		=> Math.Cosh(value);
 	public override Expr Derivative()
 		=> Sinh(Argument);
-	public override T Accept<T>(IExprVisitor<T> visitor) => visitor.Visit(this);
 }
 
 public sealed record Tanh(Expr Argument) : Function(Argument)
@@ -70,5 +65,4 @@ public sealed record Tanh(Expr Argument) : Function(Argument)
 		=> Math.Tanh(value);
 	public override Expr Derivative()
 		=> 1 - (this ^ 2);
-	public override T Accept<T>(IExprVisitor<T> visitor) => visitor.Visit(this);
 }

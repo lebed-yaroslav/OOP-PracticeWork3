@@ -26,8 +26,6 @@ public sealed record Add(Expr Left, Expr Right) : BinaryOperator(Left, Right)
 
 	public override double ComputeFor(double left, double right)
 		=> left + right;
-
-	public override T Accept<T>(IExprVisitor<T> visitor) => visitor.Visit(this);
 }
 
 
@@ -36,8 +34,6 @@ public sealed record Subtract(Expr Left, Expr Right) : BinaryOperator(Left, Righ
 	public override string Alias => "-";
 	public override double ComputeFor(double left, double right)
 		=> left - right;
-
-	public override T Accept<T>(IExprVisitor<T> visitor) => visitor.Visit(this);
 }
 
 
@@ -48,8 +44,6 @@ public sealed record Multiply(Expr Left, Expr Right) : BinaryOperator(Left, Righ
 		Left.PolynomialDegree.Value + Right.PolynomialDegree.Value : null;
 	public override double ComputeFor(double left, double right)
 		=> left * right;
-
-	public override T Accept<T>(IExprVisitor<T> visitor) => visitor.Visit(this);
 }
 
 
@@ -60,8 +54,6 @@ public sealed record Divide(Expr Left, Expr Right) : BinaryOperator(Left, Right)
 		Left.PolynomialDegree.Value : null;
 	public override double ComputeFor(double left, double right)
 		=> left / right;
-
-	public override T Accept<T>(IExprVisitor<T> visitor) => visitor.Visit(this);
 }
 
 
@@ -83,6 +75,4 @@ public sealed record Power(Expr Left, Expr Right) : BinaryOperator(Left, Right)
 
 	public override double ComputeFor(double left, double right)
 		=> Math.Pow(left, right);
-
-	public override T Accept<T>(IExprVisitor<T> visitor) => visitor.Visit(this);
 }

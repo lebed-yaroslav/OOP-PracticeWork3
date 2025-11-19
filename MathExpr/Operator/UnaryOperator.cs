@@ -23,6 +23,4 @@ public sealed record Negate(Expr Operand) : UnaryOperator(Operand)
 	public override string Alias => "-";
 	public override double ComputeFor(double value)
 		=> -value;
-
-	public override T Accept<T>(IExprVisitor<T> visitor) => visitor.Visit(this);
 }

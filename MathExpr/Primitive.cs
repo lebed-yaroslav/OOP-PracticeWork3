@@ -8,8 +8,6 @@ public sealed record Variable(string Name) : Expr
 	public override double Compute(IReadOnlyDictionary<string, double> variables)
 		=> variables[Name];
 
-	public override T Accept<T>(IExprVisitor<T> visitor) => visitor.Visit(this);
-
 	public override string ToString() => Name;
 }
 
@@ -24,8 +22,6 @@ public sealed record Constant(double Value) : Expr
 
 	public override double Compute(IReadOnlyDictionary<string, double> variables)
 		=> Value;
-
-	public override T Accept<T>(IExprVisitor<T> visitor) => visitor.Visit(this);
 
 	public override string ToString() => Value.ToString();
 }
