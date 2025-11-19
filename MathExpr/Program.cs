@@ -23,9 +23,9 @@ internal static class TestProgram
 		var expr2 = (5 - 3 * c) * Sqrt(16 + c * c);
 		var inputValues = new Dictionary<string, double> { ["x"] = 1, ["y"] = 2 };
 		WriteExprInfo(expr1);
-		Console.WriteLine($"-Value (x = 1, y = 2): {expr1.Compute(inputValues)}");
+		Console.WriteLine($". Value (x = 1, y = 2): {expr1.Compute(inputValues)}");
 		WriteExprInfo(expr2);
-		Console.WriteLine($"-Value (x = 1, y = 2): {expr2.Compute(inputValues)}");
+		Console.WriteLine($". Value (x = 1, y = 2): {expr2.Compute(inputValues)}");
 	}
 
 	private static void RunDerivativeTest1()
@@ -36,7 +36,7 @@ internal static class TestProgram
 		var inputValues = new Dictionary<string, double> { ["x"] = 1, ["y"] = 2 };
 		var expr1 = Exp(Log(x + y + c));
 		WriteExprInfo(expr1);
-		Console.WriteLine($"-Value (x = 1, y = 2): {expr1.Compute(inputValues)}");
+		Console.WriteLine($". Value (x = 1, y = 2): {expr1.Compute(inputValues)}");
 		Console.WriteLine($"(Simplified): {expr1.Simplify()}");
 		Console.WriteLine($"(Simplified) d/dx: {expr1.Simplify().Derivative("x")}");
 		Console.WriteLine($"d/dx (Non simplified): {expr1.Derivative("x")}");
@@ -46,9 +46,9 @@ internal static class TestProgram
 	private static void WriteExprInfo(IExpr expr)
 		=> Console.WriteLine($"""
 		Expression: {expr}
-		- IsConstant: {expr.IsConstant}
-		- Variables: [{string.Join(", ", expr.Variables)}]
-		- IsPolynomial: {expr.IsPolynomial}
-		- Degree: {expr.PolynomialDegree}
+		. IsConstant: {expr.IsConstant}
+		. Variables: [{string.Join(", ", expr.Variables)}]
+		. IsPolynomial: {expr.IsPolynomial}
+		. Degree: {expr.PolynomialDegree}
 		""");
 }

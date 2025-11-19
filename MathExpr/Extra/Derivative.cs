@@ -12,7 +12,7 @@ public static class DerivativeExt
 		public Expr Derivative(string v)
 		{
 			// Always true for Constant
-			if (!expr.Variables.Contains(v))
+			if (!expr.DependsOn(v))
 				return Constant.Zero;
 			return expr switch {
 				Variable(var x) => Constant.One,

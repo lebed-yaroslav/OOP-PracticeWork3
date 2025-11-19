@@ -25,6 +25,9 @@ public static class IExprExt
 		/// <exception cref="KeyNotFoundException"/>
 		/// <returns>Computed value</returns>
 		public double ComputeConstant() => expr.Compute(ImmutableDictionary<string, double>.Empty);
+
+		public bool DependsOn(string variable)
+			=> expr.Variables.Contains(variable);
 	}
 }
 
