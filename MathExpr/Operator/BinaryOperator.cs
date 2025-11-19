@@ -70,7 +70,7 @@ public sealed record Power(Expr Left, Expr Right) : BinaryOperator(Left, Right)
 	public override string Alias => "^";
 	public override int? PolynomialDegree 
 	{
-		get 
+		get
 		{
 			if (!Left.IsPolynomial || Right is not Constant c) // Only for simplified expressions
 				return null;

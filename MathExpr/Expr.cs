@@ -21,7 +21,7 @@ public static class IExprExt
 		public bool IsPolynomial => expr.PolynomialDegree.HasValue;
 
 		/// <summary>
-		/// Computes value if underlying expression is constant
+		/// Computes value if underlying expression is constant <see cref="get_IsConstant(IExpr)"/>
 		/// </summary>
 		/// <exception cref="KeyNotFoundException"/>
 		/// <returns>Computed value</returns>
