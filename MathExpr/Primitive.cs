@@ -23,5 +23,6 @@ public sealed record Constant(double Value) : Expr
 	public override double Compute(IReadOnlyDictionary<string, double> variables)
 		=> Value;
 
-	public override string ToString() => Value.ToString();
+	public override string ToString() => 
+		Value >= 0 ? $"{Value}" : $"({Value})";
 }

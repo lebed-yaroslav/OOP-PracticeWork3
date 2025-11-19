@@ -16,7 +16,7 @@ public abstract record BinaryOperator(Expr Left, Expr Right) : Expr
 		=> ComputeFor(Left.Compute(variables), Right.Compute(variables));
 
 	// Object:
-	public sealed override string ToString() => $"({Left}) {Alias} ({Right})";
+	public sealed override string ToString() => $"({Left} {Alias} {Right})";
 }
 
 
