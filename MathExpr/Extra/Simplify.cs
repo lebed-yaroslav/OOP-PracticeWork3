@@ -10,10 +10,7 @@ public static class SimplifyExt
 	extension(Expr expr)
 	{
 		public Expr Simplify()
-		{
-			if (expr.IsConstant && expr is not Constant)
-				return expr.ComputeConstant();
-			return expr switch {
+			=> expr switch {
 				Negate neg => Simplify(neg),
 				Add add => Simplify(add),
 				Subtract sub => Simplify(sub),
@@ -28,7 +25,6 @@ public static class SimplifyExt
 				Tanh tanh => Simplify(tanh),
 				_ => expr
 			};
-		}
 	}
 
 	private static Expr Simplify(Negate neg)
