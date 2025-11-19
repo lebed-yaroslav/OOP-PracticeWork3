@@ -10,7 +10,10 @@ public static class SimplifyExt
 	extension(Expr expr)
 	{
 		public Expr Simplify()
-			=> expr switch {
+		{
+			if (expr.TryComputeConstant(out var c) && double.IsFinite(c))
+				return c;
+			return expr switch {
 				Negate neg => Simplify(neg),
 				Add add => Simplify(add),
 				Subtract sub => Simplify(sub),
@@ -25,6 +28,7 @@ public static class SimplifyExt
 				Tanh tanh => Simplify(tanh),
 				_ => expr
 			};
+		}
 	}
 
 	private static Expr Simplify(Negate neg)

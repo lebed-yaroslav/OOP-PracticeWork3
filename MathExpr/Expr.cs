@@ -26,6 +26,17 @@ public static class IExprExt
 		/// <returns>Computed value</returns>
 		public double ComputeConstant() => expr.Compute(ImmutableDictionary<string, double>.Empty);
 
+		public bool TryComputeConstant(out double result)
+		{
+			if (expr.IsConstant)
+			{
+				result = expr.ComputeConstant();
+				return true;
+			}
+			result = 0;
+			return false;
+		}
+
 		public bool DependsOn(string variable)
 			=> expr.Variables.Contains(variable);
 	}
