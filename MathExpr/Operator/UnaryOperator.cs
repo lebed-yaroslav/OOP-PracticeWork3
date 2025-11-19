@@ -14,7 +14,7 @@ public abstract record UnaryOperator(Expr Operand) : Expr
 
 	// Object:
 	public sealed override string ToString()
-		=> $"{Alias}{Operand}";
+		=> $"{Alias}({Operand})";
 }
 
 
