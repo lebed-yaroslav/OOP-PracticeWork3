@@ -35,7 +35,6 @@ public static class SimplifyExt
 	{
 		var operand = Simplify(neg.Operand);
 		return operand switch {
-			Constant(var val) => new Constant(-val),
 			Negate(var op) => op,
 			_ => -operand
 		};
@@ -51,15 +50,12 @@ public static class SimplifyExt
 			return right;
 		if (right is Constant(var rc) && rc == 0)
 			return left;
-		if (left is Constant(var lConst) && right is Constant(var rConst))
-			return new Constant(lConst + rConst);
 		if (left.Equals(right))
 			return 2 * left;
 
-		// Distribution:
-		// x / y + z / y = (x + z) / y
-		// FIXME: Datatype LinearCombunation and non binary Multiply(...)
-		if (
+        // Unite under common factor:
+        // x / y + z / y = (x + z) / y
+        if (
 			left is Divide(var lNum, var lDen) &&
 			right is Divide(var rNum, var rDen) &&
 			lDen.Equals(rDen)
@@ -78,13 +74,17 @@ public static class SimplifyExt
 			return -right;
 		if (right is Constant(var rc) && rc == 0)
 			return left;
-		if (
-			left is Constant(var lConst) &&
-			right is Constant(var rConst)
-		)
-			return new Constant(lConst - rConst);
 		if (left.Equals(right))
-			return Constant.Zero;
+			return 0;
+
+		// Unite under common factor:
+		// x / y + z / y = (x + z) / y
+		if (
+			left is Divide(var lNum, var lDen) &&
+			right is Divide(var rNum, var rDen) &&
+			lDen.Equals(rDen)
+		) return Simplify((lNum - rNum) / lDen);
+
 		return left - right;
 	}
 
@@ -97,20 +97,14 @@ public static class SimplifyExt
 		// Constants:
 		if (left is Constant(var lc))
 		{
-			if (lc == 0) return Constant.Zero;
+			if (lc == 0) return 0;
 			if (lc == 1) return right;
 		}
 		if (right is Constant(var rc))
 		{
-			if (rc == 0) return Constant.Zero;
+			if (rc == 0) return 0;
 			if (rc == 1) return left;
 		}
-		if (
-			left is Constant(var lConst) &&
-			right is Constant(var rConst)
-		)
-			return new Constant(lConst * rConst);
-
 		if (left.Equals(right))
 			return left ^ 2;
 
@@ -124,7 +118,8 @@ public static class SimplifyExt
 			return Simplify((right * a3) - (right * b3));
 		if (right is Subtract(var a4, var b4))
 			return Simplify((left * a4) - (left * b4));
-		// FIXME: Datatype LinearCombunation and non binary Multiply(...)
+
+		// FIXME: Datatype LinearCombination and non binary Multiply(...)
 		// x * (y / z) = (x * y) / z
 		if (left is Divide(var lNum, var lDen))
 			return Simplify((lNum * right) / lDen);
@@ -140,22 +135,27 @@ public static class SimplifyExt
 
 		// Constants:
 		if (left is Constant(var lc) && lc == 0)
-			return Constant.Zero;
+			return 0;
 		if (right is Constant(var rc) && rc == 1)
 			return left;
-		if (
-			left is Constant(var lConst) &&
-			right is Constant(var rConst) &&
-			rConst != 0
-		)
-			return new Constant(lConst / rConst);
 		if (left.Equals(right))
-			return Constant.One;
+			return 1;
 
-		// FIXME: Datatype LinearCombunation and non binary Multiply(...)
+		// FIXME: Datatype LinearCombination and non binary Multiply(...)
 		// (x / (y / z) = (x * z) / y
 		if (right is Divide(var rNum, var rDen))
 			return Simplify((left * rDen) / rNum);
+
+		// (x^a / x^b) = x^(a - b)
+		if (left is Power(var lBase, var lPow))
+		{
+			if (right is Variable rVar && rVar.Equals(lBase))
+				return Simplify(lBase ^ (lPow - 1));
+			if (right is Power(var rBase, var rPow) && rBase.Equals(lBase))
+				return Simplify(lBase ^ (lPow - rPow));
+		}
+		else if (left is Variable lVar && right is Power(var rBase, var rPow) && rBase.Equals(lVar))
+			return Simplify(lVar ^ (1 - rPow));
 
 		return left / right;
 	}
@@ -168,16 +168,15 @@ public static class SimplifyExt
 		// Constants:
 		if (right is Constant(var rc))
 		{
-			if (rc == 0) return Constant.One;
+			if (rc == 0) return 1;
 			if (rc == 1) return left;
+			if (rc == -1) return 1 / left;
 		}
-		if (left is Constant(var lc) && lc == 1)
-			return Constant.One;
-		if (
-			left is Constant(var lConst) &&
-			right is Constant(var rConst)
-		)
-			return new Constant(Math.Pow(lConst, rConst));
+		if (left is Constant(var lc))
+		{
+			if (lc == 0) return 0;
+			if (lc == 1) return 1;
+		}
 
 		return left ^ right;
 	}
@@ -185,20 +184,16 @@ public static class SimplifyExt
 	private static Expr Simplify(Sqrt sqrt)
 	{
 		var arg = Simplify(sqrt.Argument);
-		return arg switch {
-			Constant(var c) => new Constant(sqrt.ComputeFor(c)),
-			_ => Sqrt(arg)
-		};
+		if (arg is Power(var b, var p) && p is Constant(var c))
+			return Simplify(b ^ (c / 2));
+		return Sqrt(arg);
 	}
 
 	private static Expr Simplify(Exp exp)
 	{
 		var arg = Simplify(exp.Argument);
 		return arg switch {
-			Constant(var c) => new Constant(exp.ComputeFor(c)),
 			Log(var a) => a,
-			Add(var a, var b) => Simplify(Exp(a) * Exp(b)),
-			Subtract(var a, var b) => Simplify(Exp(a) * Exp(-b)),
 			_ => Exp(arg)
 		};
 	}
@@ -207,38 +202,17 @@ public static class SimplifyExt
 	{
 		var arg = Simplify(log.Argument);
 		return arg switch {
-			Constant(var c) => new Constant(log.ComputeFor(c)),
 			Exp(var a) => a,
-			Multiply(var a, var b) => Simplify(Log(a) + Log(b)),
-			Divide(var a, var b) => Simplify(Log(a) - Log(b)),
 			_ => Log(arg)
 		};
 	}
 
 	private static Expr Simplify(Sinh sinh)
-	{
-		var arg = Simplify(sinh.Argument);
-		return arg switch {
-			Constant(var c) => new Constant(sinh.ComputeFor(c)),
-			_ => Sinh(arg)
-		};
-	}
+		=> Sinh(Simplify(sinh.Argument));
 
 	private static Expr Simplify(Cosh cosh)
-	{
-		var arg = Simplify(cosh.Argument);
-		return arg switch {
-			Constant(var c) => new Constant(cosh.ComputeFor(c)),
-			_ => Cosh(arg)
-		};
-	}
+		=> Cosh(Simplify(cosh.Argument));
 
 	private static Expr Simplify(Tanh tanh)
-	{
-		var arg = Simplify(tanh.Argument);
-		return arg switch {
-			Constant(var c) => new Constant(tanh.ComputeFor(c)),
-			_ => Tanh(arg)
-		};
-	}
+		=> Tanh(Simplify(tanh.Argument));
 }

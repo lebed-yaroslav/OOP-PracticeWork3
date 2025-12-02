@@ -3,4 +3,5 @@
     <File Path=".editorconfig" />
   </Folder>
   <Project Path="MathExpr/MathExpr.csproj" />
+  <Project Path="MathExprTests/MathExprTests.csproj" Id="a6a604cc-529b-483a-9bec-226a1ec6ad9b" />
 </Solution>

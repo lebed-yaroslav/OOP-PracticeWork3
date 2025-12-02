@@ -14,9 +14,6 @@ public sealed record Variable(string Name) : Expr
 
 public sealed record Constant(double Value) : Expr
 {
-	public static readonly Constant Zero = new(0);
-	public static readonly Constant One = new(1);
-
 	public override IEnumerable<string> Variables => [];
 	public override int? PolynomialDegree => 0;
 

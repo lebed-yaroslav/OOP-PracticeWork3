@@ -13,9 +13,9 @@ public static class DerivativeExt
 		{
 			// Always true for Constant
 			if (!expr.DependsOn(v))
-				return Constant.Zero;
+				return 0;
 			return expr switch {
-				Variable(var x) => Constant.One,
+				Variable(var x) => 1,
 				Negate(var a) => -a.Derivative(v),
 				Add(var a, var b) => a.Derivative(v) + b.Derivative(v),
 				Subtract(var a, var b) => a.Derivative(v) - b.Derivative(v),

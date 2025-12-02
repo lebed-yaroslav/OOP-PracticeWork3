@@ -1,4 +1,5 @@
 ﻿using MathExpr.Operator;
+using System.Collections;
 using System.Collections.Immutable;
 
 namespace MathExpr;
@@ -18,6 +19,9 @@ public static class IExprExt
 	{
 		public bool IsConstant => !expr.Variables.Any();
 		public bool IsPolynomial => expr.PolynomialDegree.HasValue;
+
+		public double Compute(params IEnumerable<(string, double)> variables)
+			=> expr.Compute(variables.ToDictionary(v => v.Item1, v => v.Item2));
 
 		/// <summary>
 		/// Computes value if underlying expression is constant <see cref="get_IsConstant(IExpr)"/>
