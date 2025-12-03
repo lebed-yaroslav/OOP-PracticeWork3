@@ -2,6 +2,7 @@
 using MathExpr.Functions;
 using MathExpr.Extra;
 using static MathExpr.Functions.BasicFunctions;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MathExprTests;
 
@@ -46,4 +47,20 @@ public sealed class TestDerivative
 		[(x, y) => x / y, (x, y) => 1 / y],
 		[(x, y) => x ^ y, (x, y) => y * (x ^ y) / x]
 	];
+
+
+	[ExcludeFromCodeCoverage]
+	private sealed record TestExpr(Expr Argument) : Expr
+	{
+		public override IEnumerable<string> Variables => Argument.Variables;
+		public override int? PolynomialDegree => null;
+		public override double Compute(IReadOnlyDictionary<string, double> variables)
+			=> 0;
+	}
+
+	[TestMethod]
+	public void ThrowsOnUnknownType() {
+		var expr = new TestExpr(x);
+		Assert.ThrowsExactly<NotImplementedException>(() => expr.Derivative("x"));
+	}
 }

@@ -62,11 +62,12 @@ public sealed class TestSimplify
 		[x - 0, x], [0 - x, -x], [x - x, 0], [x - x + x, x],
 		// Multiply
 		[x * 0, 0], [0 * x, 0], [x * 1, x], [1 * x, x], [x * x, x ^ 2],
+		[3 * x, 3 * x], [x * 3, x * 3],
 		// Divide
 		[0 / x, 0], [x / 1, x], [x / x, 1],
 		// Power
 		[x ^ 0, 1], [x ^ 1, x], [x ^ (-1), 1 / x], [1 ^ x, 1],
-		[0 ^ x, 0],
+		[0 ^ x, 0], [x ^ 3, x ^ 3], [3 ^ x, 3 ^ x],
 		// Misc
 		[x * (1 / x), 1], [(1 / x) * x, 1]
 	];
