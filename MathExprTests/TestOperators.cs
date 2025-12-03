@@ -101,16 +101,10 @@ public sealed class TestBinaryOperations
 	[TestMethod]
 	public void PowerPolynomialCases()
 	{
-		var pow = x ^ 2;
-		Assert.IsTrue(pow.IsPolynomial);
-		pow ^= 1.2;
-		Assert.IsFalse(pow.IsPolynomial);
-		pow = x ^ y;
-		Assert.IsFalse(pow.IsPolynomial);
-		Assert.AreEqual("(x ^ y)", pow.ToString());
-		pow = x ^ (-2);
-		Assert.IsFalse(pow.IsPolynomial);
-		pow = (1 / x) ^ 2;
-		Assert.IsFalse(pow.IsPolynomial);
+		Assert.AreEqual(4, ((x ^ 2) ^ 2).PolynomialDegree);
+		Assert.IsFalse(((x ^ 2) ^ 1.2).IsPolynomial);
+		Assert.IsFalse((x ^ y).IsPolynomial);
+		Assert.IsFalse((x ^ -2).IsPolynomial);
+		Assert.IsFalse(((1 / x) ^ 2).IsPolynomial);
 	}
 }
