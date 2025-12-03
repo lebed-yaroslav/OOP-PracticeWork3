@@ -1,5 +1,4 @@
 ﻿using MathExpr;
-using MathExpr.Functions;
 using MathExpr.Extra;
 using static MathExpr.Functions.BasicFunctions;
 using MathExpr.Operator;
@@ -13,23 +12,25 @@ public sealed class TestSimplify
 	private static readonly Variable y = new("y");
 	private static readonly Variable z = new("z");
 
+
 	[TestMethod]
 	[DynamicData(nameof(FunctionSimplifyCases))]
 	public void FunctionsSimplifyAreCorrect(Func<Expr, Expr> function, Func<Expr, Expr> expected)
 		=> Assert.AreEqual(expected(x), function(x).Simplify());
 
-	public static IEnumerable<Func<Expr, Expr>[]> FunctionSimplifyCases = [
+	public static readonly IEnumerable<Func<Expr, Expr>[]> FunctionSimplifyCases = [
 		[x => -(-x), x => x],
 		[x => Exp(Log(x)), x => x],
 		[x => Log(Exp(x)), x => x],
 	];
+
 
 	[TestMethod]
 	[DynamicData(nameof(ConstantComputeCases))]
 	public void ConstantComputeIsCorrect(Expr expr, Constant expected)
 		=> Assert.AreEqual(expected, expr.Simplify());
 
-	public static IEnumerable<Expr[]> ConstantComputeCases = [
+	public static readonly IEnumerable<Expr[]> ConstantComputeCases = [
 		[new Negate(1), -1],
 		[Sqrt(1), 1],
 		[Exp(1), Math.E],
@@ -38,6 +39,7 @@ public sealed class TestSimplify
 		[Cosh(0), 1],
 		[Tanh(0), 0]
 	];
+
 
 	[TestMethod]
 	public void SimplifySqrtOfPowerCorrect()
@@ -53,7 +55,7 @@ public sealed class TestSimplify
 	public void ConstantFoldingIsCorrect(Expr expr, Expr expected)
 		=> Assert.AreEqual(expected, expr.Simplify(), message: $"Original expression: {expr}");
 
-	public static IEnumerable<Expr[]> ConstantFoldingCases = [
+	public static readonly IEnumerable<Expr[]> ConstantFoldingCases = [
 		// Add
 		[x + 0, x], [0 + x, x], [x + x, 2 * x], [x + x + 0 + 0, 2 * x],
 		// Subtract
@@ -67,7 +69,8 @@ public sealed class TestSimplify
 		[0 ^ x, 0],
 		// Misc
 		[x * (1 / x), 1], [(1 / x) * x, 1]
-    ];
+	];
+
 
 	[TestMethod]
 	public void ExprAreUnitedUnderCommonFactor()
@@ -76,6 +79,7 @@ public sealed class TestSimplify
 		Assert.AreEqual((x - y) / z, ((x / z) - (y / z)).Simplify());
 	}
 
+
 	[TestMethod]
 	public void NestedDividesAreFlip()
 	{
@@ -83,23 +87,25 @@ public sealed class TestSimplify
 		Assert.AreEqual((x ^ 2) / (z ^ 2), (x / (z / (x / z))).Simplify());
 	}
 
+
 	[TestMethod]
 	[DynamicData(nameof(DivisionOfPowersCases))]
 	public void DivisionOfPowersAreCorrect(Expr expr, Expr expected)
 		=> Assert.AreEqual(expected, expr.Simplify(), message: $"Original expression: {expr}");
 
-	public static IEnumerable<Expr[]> DivisionOfPowersCases = [
+	public static readonly IEnumerable<Expr[]> DivisionOfPowersCases = [
 		[(x ^ y) / x, x ^ (y - 1)],
 		[x / (x ^ y), x ^ (1 - y)],
 		[(x ^ 1.5) / (x ^ 0.5), x]
 	];
+
 
 	[TestMethod]
 	[DynamicData(nameof(MultiplyDistributionCases))]
 	public void MultiplyDistributionIsCorrect(Expr expr, Expr expected)
 		=> Assert.AreEqual(expected, expr.Simplify(), message: $"Original expression: {expr}");
 
-	public static IEnumerable<Expr[]> MultiplyDistributionCases = [
+	public static readonly IEnumerable<Expr[]> MultiplyDistributionCases = [
 		[x * (y + z), x * y + x * z],
 		[(y + z) * x, x * y + x * z],
 		[x * (y - z), x * y - x * z],

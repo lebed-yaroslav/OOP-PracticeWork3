@@ -16,12 +16,14 @@ public sealed class TestConstant
 		Assert.AreEqual(x.Value, c);
 	}
 
+
 	[TestMethod]
 	public void ShouldBeImplicitlyConverted()
 	{
 		Expr c = 5;
 		Assert.IsTrue(c is Constant);
 	}
+
 
 	[TestMethod]
 	public void ToStringShouldWrapNegative()
@@ -33,9 +35,13 @@ public sealed class TestConstant
 	}
 }
 
+
 [TestClass]
 public sealed class TestVariable
 {
+	private static readonly Variable x = new("x");
+
+
 	[TestMethod]
 	public void ShouldComputeFromDictionary()
 	{
@@ -43,13 +49,14 @@ public sealed class TestVariable
 		var result = x.Compute(new Dictionary<string, double> {
 			["x"] = 3
 		});
-        Assert.IsFalse(x.TryComputeConstant(out var c));
-        Assert.AreEqual(0, c);
-        Assert.IsFalse(x.DependsOn("y"));
-        Assert.AreEqual(3, result);
+		Assert.IsFalse(x.TryComputeConstant(out var c));
+		Assert.AreEqual(0, c);
+		Assert.IsFalse(x.DependsOn("y"));
+		Assert.AreEqual(3, result);
 		Assert.ContainsSingle(x.Variables, "x");
 		Assert.AreEqual(1, x.PolynomialDegree);
 	}
+
 
 	[TestMethod]
 	[ExcludeFromCodeCoverage]

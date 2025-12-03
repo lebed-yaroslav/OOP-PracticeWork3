@@ -8,16 +8,17 @@ namespace MathExprTests;
 [TestClass]
 public sealed class TestDerivative
 {
-	private readonly Variable _x = new("x");
-	private readonly Variable _y = new("y");
-	private readonly Variable _z = new("z");
+	private static readonly Variable x = new("x");
+	private static readonly Variable y = new("y");
+	private static readonly Variable z = new("z");
+
 
 	[TestMethod]
 	[DynamicData(nameof(FunctionDerivativeCases))]
 	public void FunctionDerivativeAreCorrect(Func<Expr, Expr> function, Func<Expr, Expr> expected)
-		=> Assert.AreEqual(expected(_x), function(_x).Derivative(_x).Simplify());
+		=> Assert.AreEqual(expected(x), function(x).Derivative(x).Simplify());
 
-	public static IEnumerable<Func<Expr, Expr>[]> FunctionDerivativeCases = [
+	public static readonly IEnumerable<Func<Expr, Expr>[]> FunctionDerivativeCases = [
 		[x => -x, x => -1],
 		[Sqrt, x => 0.5 / Sqrt(x)],
 		[Exp, Exp],
@@ -27,16 +28,18 @@ public sealed class TestDerivative
 		[Tanh, x => 1 - (Tanh(x) ^ 2)]
 	];
 
+
 	[TestMethod]
 	public void DerivativeNotDependsOnVariable()
-		=> Assert.AreEqual(0, Sqrt(_x + _y).Derivative(_z));
+		=> Assert.AreEqual(0, Sqrt(x + y).Derivative(z));
+
 
 	[TestMethod]
 	[DynamicData(nameof(OperatorDerivativeCases))]
 	public void OperatorDerivativeAreCorrect(Func<Expr, Expr, Expr> op, Func<Expr, Expr, Expr> expected)
-		=> Assert.AreEqual(expected(_x, _y), op(_x, _y).Derivative(_x).Simplify(), message: $"Original expression: {op}");
+		=> Assert.AreEqual(expected(x, y), op(x, y).Derivative(x).Simplify(), message: $"Original expression: {op}");
 
-	public static IEnumerable<Func<Expr, Expr, Expr>[]> OperatorDerivativeCases = [
+	public static readonly IEnumerable<Func<Expr, Expr, Expr>[]> OperatorDerivativeCases = [
 		[(x, y) => x + y, (x, _) => 1],
 		[(x, y) => y - x, (x, _) => -1],
 		[(x, _) => x * x, (x, _) => 2 * x],
