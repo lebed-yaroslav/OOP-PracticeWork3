@@ -1,7 +1,7 @@
 ﻿using MathExpr;
 using MathExpr.Extra;
-using static MathExpr.Functions.BasicFunctions;
 using MathExpr.Operator;
+using static MathExpr.Functions.BasicFunctions;
 
 namespace MathExprTests;
 
